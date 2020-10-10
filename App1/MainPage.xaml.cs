@@ -10,9 +10,6 @@ using System.Text.Json;
 
 namespace App1
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         private static readonly HttpClient client = new HttpClient();
