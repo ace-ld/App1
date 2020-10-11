@@ -6,28 +6,44 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:DesignWidth="603" d:DesignHeight="928">
 
-    <RelativePanel>
-        <Button x:Name="getCovidInfo" Content="Get info" Margin="10"
-                RelativePanel.AlignTopWithPanel="True"
-                RelativePanel.AlignRightWithPanel="True"
-                Click="Get_ClickAsync"/>
-        <TextBox x:Name="countryBoxSearch" Margin="10"
-                 RelativePanel.LeftOf="getCovidInfo"
-                 RelativePanel.AlignLeftWithPanel="True"
-                 PlaceholderText="Введите название города"
-        />
-        <ProgressBar x:Name="progressBar" Width="200"
+    <RelativePanel Margin="9,9,0,0">
+        <ComboBox x:Name="CountryCombo" Header="Country" Height="60" Width="296" Margin="10"
+                  ItemsSource="{x:Bind CountryList}"
+                  SelectionChanged="CountryCombo_SelectionChanged"
+                  RelativePanel.AlignHorizontalCenterWithPanel="True"/>
+        
+        <ProgressBar x:Name="progressBar" Width="200" Margin="10"
                      RelativePanel.AlignHorizontalCenterWithPanel="True"
-                     RelativePanel.Below="countryBoxSearch"/>
-        <TextBlock x:Name="Country"
+                     RelativePanel.Below="CountryCombo"/>
+
+        <TextBlock x:Name="NewDeaths" Margin="10"
+                   RelativePanel.AlignHorizontalCenterWithPanel="True"
                    RelativePanel.Below="progressBar"/>
-        <TextBlock x:Name="TotalDeaths"
-                   RelativePanel.Below="Country"/>
-        <TextBlock x:Name="TotalConfirmed"
+
+        <TextBlock x:Name="NewConfirmed" Margin="10"
+                   RelativePanel.AlignHorizontalCenterWithPanel="True"
+                   RelativePanel.Below="NewDeaths"/>
+
+        <TextBlock x:Name="NewRecovered" Margin="10"
+                   RelativePanel.AlignHorizontalCenterWithPanel="True"
+                   RelativePanel.Below="NewConfirmed"/>
+
+        <TextBlock x:Name="TotalDeaths" Margin="10"
+                   RelativePanel.AlignHorizontalCenterWithPanel="True"
+                   RelativePanel.Below="NewRecovered"/>
+        
+        <TextBlock x:Name="TotalConfirmed" Margin="10"
+                   RelativePanel.AlignHorizontalCenterWithPanel="True"
                    RelativePanel.Below="TotalDeaths"/>
-        <TextBlock x:Name="TotalRecovered"
+        
+        <TextBlock x:Name="TotalRecovered" Margin="10"
+                   RelativePanel.AlignHorizontalCenterWithPanel="True"
                    RelativePanel.Below="TotalConfirmed"/>
+        
+        <TextBlock x:Name="DateCovid" Margin="10"
+                   RelativePanel.AlignHorizontalCenterWithPanel="True"
+                   RelativePanel.Below="TotalRecovered"/>
     </RelativePanel>
 </Page>

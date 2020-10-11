@@ -1,49 +1,66 @@
-﻿using Windows.UI.Xaml.Controls;
-using CovidApi;
+﻿using CovidApi;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Net.Http.Headers;
-using Windows.UI.Xaml;
 using System.Text.Json;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+using System.Threading.Tasks;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace App1
 {
     public sealed partial class MainPage : Page
     {
+        private readonly List<string> CountryList = new List<string>();
         private static readonly HttpClient client = new HttpClient();
 
         public MainPage()
         {
             this.InitializeComponent();
+            GetCountry();
         }
 
-        private async void Get_ClickAsync(object sender, RoutedEventArgs e)
+        // запрос к апи
+        private async Task<Root> RequestApi()
         {
-            progressBar.IsIndeterminate = true;
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
 
             var streamTask = client.GetStreamAsync("https://api.covid19api.com/summary");
-
             var myDeserializedClass = await JsonSerializer.DeserializeAsync<Root>(await streamTask);
 
-            foreach(var r in myDeserializedClass.Countries)
+            return myDeserializedClass;
+        }
+
+        private async void GetCountry()
+        {
+            var repo = await RequestApi();
+            foreach (var c in repo.Countries)
+                CountryList.Add(c.CountryStr);
+        }
+
+        private async void CountryCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            progressBar.IsIndeterminate = true;
+
+            var repo = await RequestApi();
+            string countryName = e.AddedItems[0].ToString();
+
+            foreach (var r in repo.Countries)
             {
-                if(countryBoxSearch.Text == r.CountryStr)
+                if (countryName == r.CountryStr)
                 {
-                    Country.Text = $"Country: {r.CountryStr}";
+                    NewDeaths.Text = $"New deaths: {r.NewDeaths}";
+                    NewConfirmed.Text = $"New confirmed: {r.NewConfirmed}";
+                    NewRecovered.Text = $"New recovered: {r.NewRecovered}";
                     TotalDeaths.Text = $"Total deaths: {r.TotalDeaths}";
                     TotalConfirmed.Text = $"Total confirmed: {r.TotalConfirmed}";
                     TotalRecovered.Text = $"Total recovered: {r.TotalRecovered}";
-                }else if (countryBoxSearch.Text == null)
-                {
-                    countryBoxSearch.Text = "Ooops!";
+                    DateCovid.Text = r.Date.ToString();
                 }
             }
-            progressBar.IsIndeterminate = false;
         }
     }
 }
