@@ -1,11 +1,9 @@
 ﻿using CovidApi;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace App1
@@ -61,6 +59,8 @@ namespace App1
                     DateCovid.Text = r.Date.ToString();
                 }
             }
+
+            progressBar.IsIndeterminate = false;
         }
     }
 }
