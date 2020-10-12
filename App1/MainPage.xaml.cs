@@ -1,5 +1,7 @@
 ﻿using API;
 using System.Collections.Generic;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace App1
@@ -32,17 +34,22 @@ namespace App1
             {
                 if (countryName == r.CountryStr)
                 {
-                    NewDeaths.Text = $"New deaths: {r.NewDeaths}";
-                    NewConfirmed.Text = $"New confirmed: {r.NewConfirmed}";
-                    NewRecovered.Text = $"New recovered: {r.NewRecovered}";
-                    TotalDeaths.Text = $"Total deaths: {r.TotalDeaths}";
-                    TotalConfirmed.Text = $"Total confirmed: {r.TotalConfirmed}";
-                    TotalRecovered.Text = $"Total recovered: {r.TotalRecovered}";
-                    DateCovid.Text = r.Date.ToString();
+                    NewDeaths.Text = $"Новые смерти: {r.NewDeaths}";
+                    NewConfirmed.Text = $"Новые заражения: {r.NewConfirmed}";
+                    NewRecovered.Text = $"Вылечилось: {r.NewRecovered}";
+                    TotalDeaths.Text = $"Всего смертей: {r.TotalDeaths}";
+                    TotalConfirmed.Text = $"Всего заразилось: {r.TotalConfirmed}";
+                    TotalRecovered.Text = $"Всего вылечилось: {r.TotalRecovered}";
+                    DateCovid.Text = $"Информация на момент: {r.Date}";
                 }
             }
-
             progressBar.IsIndeterminate = false;
+        }
+
+        // lock change window size
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ApplicationView.GetForCurrentView().TryResizeView(new Windows.Foundation.Size(600, 920));
         }
     }
 }
