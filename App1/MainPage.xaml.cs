@@ -1,5 +1,7 @@
 ﻿using API;
+using CovidApi;
 using System.Collections.Generic;
+using System.Net.Http;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -8,26 +10,41 @@ namespace App1
 {
     public sealed partial class MainPage : Page
     {
+        private static Root repo;
         private readonly List<string> CountryList = new List<string>();
 
         public MainPage()
         {
             this.InitializeComponent();
-            GetCountry();
+            GetStat();
         }
 
-        private async void GetCountry()
+        private async void GetStat()
         {
-            var repo = await GetCovid.RequestApi();
-            foreach (var c in repo.Countries)
-                CountryList.Add(c.CountryStr);
+            try
+            {
+                repo = await GetCovid.RequestApi();
+                if(repo.Countries != null)
+                {
+                    foreach (var c in repo.Countries)
+                        CountryList.Add(c.CountryStr);
+                }
+                else
+                {
+                    NewDeaths.Text = "Из API не пришло статистики :(";
+                }
+                
+            }
+            catch (HttpRequestException e)
+            {
+                NewDeaths.Text = e.Message;
+            }
+
+            progressBar.IsIndeterminate = false;
         }
 
-        private async void CountryCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CountryCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            progressBar.IsIndeterminate = true;
-
-            var repo = await GetCovid.RequestApi();
             string countryName = e.AddedItems[0].ToString();
 
             foreach (var r in repo.Countries)
@@ -40,16 +57,29 @@ namespace App1
                     TotalDeaths.Text = $"Всего смертей: {r.TotalDeaths}";
                     TotalConfirmed.Text = $"Всего заразилось: {r.TotalConfirmed}";
                     TotalRecovered.Text = $"Всего вылечилось: {r.TotalRecovered}";
-                    DateCovid.Text = $"Информация на момент: {r.Date}";
+                    DateCovid.Text = $"Данные на момент: {r.Date}";
                 }
             }
-            progressBar.IsIndeterminate = false;
         }
 
         // lock change window size
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             ApplicationView.GetForCurrentView().TryResizeView(new Windows.Foundation.Size(600, 920));
+        }
+
+        private async void UpdateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            progressBar.IsIndeterminate = true;
+            var _repo = await GetCovid.RequestApi();
+            if (repo.Countries != null)
+            {
+                repo.Countries.Clear();
+                repo = _repo;
+                foreach (var c in repo.Countries)
+                    CountryList.Add(c.CountryStr);
+            }
+            progressBar.IsIndeterminate = false;
         }
     }
 }

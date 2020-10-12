@@ -14,8 +14,12 @@
                   ItemsSource="{x:Bind CountryList}"
                   SelectionChanged="CountryCombo_SelectionChanged"
                   RelativePanel.AlignHorizontalCenterWithPanel="True"/>
-        
-        <ProgressBar x:Name="progressBar" Width="200" Margin="10"
+
+        <Button x:Name="updateBtn" Content="Обновить" Click="UpdateBtn_Click" Width="87" Height="33" Margin="32"
+                RelativePanel.AlignRightWith="CountryCombo"
+                RelativePanel.AlignRightWithPanel="True"/>
+
+        <ProgressBar x:Name="progressBar" Width="150" Margin="10" IsIndeterminate="True"
                      RelativePanel.AlignHorizontalCenterWithPanel="True"
                      RelativePanel.Below="CountryCombo"/>
 

@@ -1,5 +1,4 @@
 ﻿using CovidApi;
-using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -20,7 +19,6 @@ namespace API
 
             var streamTask = client.GetStreamAsync("https://api.covid19api.com/summary");
             var myDeserializedClass = await JsonSerializer.DeserializeAsync<Root>(await streamTask);
-
             return myDeserializedClass;
         }
     }
