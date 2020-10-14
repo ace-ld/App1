@@ -67,19 +67,5 @@ namespace App1
         {
             ApplicationView.GetForCurrentView().TryResizeView(new Windows.Foundation.Size(600, 920));
         }
-
-        private async void UpdateBtn_Click(object sender, RoutedEventArgs e)
-        {
-            progressBar.IsIndeterminate = true;
-            var _repo = await GetCovid.RequestApi();
-            if (repo.Countries != null)
-            {
-                repo.Countries.Clear();
-                repo = _repo;
-                foreach (var c in repo.Countries)
-                    CountryList.Add(c.CountryStr);
-            }
-            progressBar.IsIndeterminate = false;
-        }
     }
 }
