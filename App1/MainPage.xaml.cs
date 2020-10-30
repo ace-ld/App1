@@ -61,11 +61,5 @@ namespace App1
                 }
             }
         }
-
-        // lock change window size
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            ApplicationView.GetForCurrentView().TryResizeView(new Windows.Foundation.Size(600, 920));
-        }
     }
 }
